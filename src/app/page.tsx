@@ -40,7 +40,7 @@ export default function HomePage() {
           <div className="grid gap-x-5 gap-y-12 tablet:grid-cols-2 tablet:gap-y-16">
             {featured.map((project, index) => (
               <Reveal key={project.slug} delay={(index % 2) * 0.1}>
-                <ProjectCard project={project} index={index} />
+                <ProjectCard project={project} />
               </Reveal>
             ))}
           </div>

@@ -62,6 +62,10 @@ gh api repos/tomost8/my_portfolio/rulesets --method POST --input .github/ruleset
 gh api repos/tomost8/my_portfolio/rulesets --method POST --input .github/rulesets/main.json
 ```
 
+## Content and images
+
+Copy lives in `src/data` (`site.ts`, `projects.ts`). Project photos are free-license Unsplash images in `public/images`, and each folder has a `CREDITS.md` with the photographer and source of every file. The case studies describe products and engineering problems without metrics, and they are not company screenshots.
+
 ## License
 
 MIT
