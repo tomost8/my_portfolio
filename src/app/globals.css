@@ -137,6 +137,13 @@ body {
   padding-inline: 20px;
 }
 
+/* Concepts ticker: the track holds two copies of the list, so -50% loops cleanly. */
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
