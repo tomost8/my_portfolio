@@ -1,24 +1,24 @@
 # my_portfolio
 
-Portfolio of Sam Coffey, a senior software engineer working on AI, data and full-stack products for healthcare and employee benefits. Built in Next.js, based on the structure, design system and motion of the FolioBase Framer template.
+Portfolio of Sam Coffey, a senior software engineer working on AI, data and full-stack products for healthcare and employee benefits. Built with React and React Router, based on the structure, design system and motion of the FolioBase Framer template.
 
 ## Stack
 
 | Area | Choice |
 | --- | --- |
-| Framework | Next.js 16 (App Router), React Compiler on |
-| UI | React 19.3, TypeScript (strict, `^7`) |
-| Styling | Tailwind CSS v4, CSS-first in `src/app/globals.css`, no `tailwind.config` |
+| Framework | Vite, React 19.3, React Router 7, React Compiler on |
+| UI | TypeScript (strict, `^7`) |
+| Styling | Tailwind CSS v4, CSS-first in `src/styles/globals.css`, no `tailwind.config` |
 | Motion | Motion for entrance animations and the cursor spring, Lenis for smooth scroll |
-| Font | Geist (`geist` package) |
-| Lint | ESLint 10 with `eslint-config-next`, zero warnings allowed |
+| Font | Geist variable font (`geist` package) |
+| Lint | ESLint 10 with typescript-eslint, zero warnings allowed |
 | CI runtime | Node.js 22 (`.nvmrc`) |
 
 ## Develop
 
 ```bash
 npm ci
-npm run dev        # http://localhost:3000
+npm run dev        # http://localhost:5173
 npm run lint       # eslint, zero warnings allowed
 npm run typecheck  # tsc --noEmit
 npm run build
@@ -36,7 +36,7 @@ Two long-lived branches. `dev` is where work lands and `main` is the release bra
    - **CI** (`.github/workflows/ci.yml`): runs on every pull request and on pushes to `dev` and `main`. Jobs: *Lint and type check*, *Build*, and *CI passed*, the single check the rulesets require.
    - **Merge passing pull request** (`.github/workflows/merge-passing-pr.yml`): after CI succeeds on a pull request, merge-commits it if the head is still the validated commit. Eligible: a prefix branch into `dev`, and `dev` into `main`.
 
-Production is deployed by Vercel from its Git connection, with Production tracking `main`. GitHub Actions never deploys. Dependabot opens weekly pull requests into `dev` for npm and GitHub Actions. A person merges or closes those.
+Production is deployed by Vercel from its Git connection, with Production tracking `main`. The Vite build writes `dist`, and `vercel.json` rewrites client routes to `index.html`. GitHub Actions never deploys. Dependabot opens weekly pull requests into `dev` for npm and GitHub Actions. A person merges or closes those.
 
 ### Commit co-authors
 

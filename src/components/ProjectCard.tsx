@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
+import { Link } from "react-router";
 import type { Project } from "@/data/projects";
+import { Image } from "./Image";
 import { Tag } from "./Tag";
 
 type ProjectCardProps = {
@@ -19,7 +19,7 @@ export function ProjectCard({ project, headingLevel = "h3" }: ProjectCardProps) 
   return (
     <article>
       <Link
-        href={`/projects/${project.slug}`}
+        to={`/projects/${project.slug}`}
         className="group flex flex-col gap-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950"
       >
         <div
@@ -27,13 +27,7 @@ export function ProjectCard({ project, headingLevel = "h3" }: ProjectCardProps) 
           className="aspect-[4/3] overflow-hidden rounded-2xl bg-neutral-100 tablet:rounded-3xl"
         >
           <div className="relative size-full scale-110 transition-transform duration-[600ms] ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:scale-100 group-focus-visible:scale-100 motion-reduce:scale-100">
-            <Image
-              src={project.image.src}
-              alt={project.image.alt}
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              className="object-cover"
-            />
+            <Image src={project.image.src} alt={project.image.alt} fill className="object-cover" />
           </div>
         </div>
         <div className="flex flex-col gap-3">
