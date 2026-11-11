@@ -1,8 +1,8 @@
+import Image from "next/image";
 import { concepts } from "@/data/concepts";
-import { ArtworkPlaceholder } from "./ArtworkPlaceholder";
 
 /**
- * Endless horizontal strip of concept tiles. The list is rendered twice and
+ * Endless horizontal strip of focus-area tiles. The list is rendered twice and
  * the track slides by exactly half its width, so the loop has no seam. Tile
  * spacing is padding rather than gap, otherwise half the width is off by a gap.
  * Hover or focus pauses it. With reduced motion it becomes a plain
@@ -24,8 +24,14 @@ export function ConceptsTicker() {
               aria-hidden={isCopy || undefined}
               className="w-[280px] shrink-0 pr-5 tablet:w-[360px] desktop:w-[420px]"
             >
-              <div className="aspect-[4/3] overflow-hidden rounded-2xl tablet:rounded-3xl">
-                <ArtworkPlaceholder hue={concept.hue} seed={index} />
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-neutral-100 tablet:rounded-3xl">
+                <Image
+                  src={concept.src}
+                  alt={isCopy ? "" : concept.alt}
+                  fill
+                  sizes="(min-width: 1280px) 420px, (min-width: 768px) 360px, 280px"
+                  className="object-cover"
+                />
               </div>
               <p className="t-small mt-3 text-neutral-500">{concept.title}</p>
             </li>
