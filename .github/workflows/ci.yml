@@ -1,0 +1,116 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [dev, main]
+  workflow_dispatch:
+
+# A newer push to the same branch or pull request cancels the older run.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  lint:
+    name: Lint and type check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**', 'public/**', 'next.config.ts') }}
+          restore-keys: |
+            next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+      - run: npm ci
+      - run: npm run build
+
+  # The single status check the branch rules require. It fails unless every
+  # job above succeeded. Keep the job name exactly "CI passed", the rulesets
+  # in .github/rulesets/ refer to it by that name.
+  ci-passed:
+    name: CI passed
+    if: always()
+    needs: [lint, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Check job results
+        id: result
+        env:
+          LINT: ${{ needs.lint.result }}
+          BUILD: ${{ needs.build.result }}
+        run: |
+          echo "lint=$LINT build=$BUILD"
+          if [ "$LINT" = "success" ] && [ "$BUILD" = "success" ]; then
+            echo "status=passed" >> "$GITHUB_OUTPUT"
+          else
+            echo "status=failed" >> "$GITHUB_OUTPUT"
+          fi
+
+      # One summary comment per pull request, updated on every run. It needs a
+      # token that can write to pull requests, which dependabot and fork pull
+      # requests do not get, so a failure here never fails the check.
+      - name: Post or update the summary comment
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          STATUS: ${{ steps.result.outputs.status }}
+          LINT: ${{ needs.lint.result }}
+          BUILD: ${{ needs.build.result }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          marker='<!-- ci-summary -->'
+          if [ "$STATUS" = "passed" ]; then icon="✅"; else icon="❌"; fi
+          body="$marker
+          ## $icon CI $STATUS
+
+          | Job | Result |
+          | --- | --- |
+          | Lint and type check | $LINT |
+          | Build | $BUILD |
+
+          Commit \`${SHA:0:7}\`, [run details]($RUN_URL)"
+          existing="$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate \
+            --jq "[.[] | select(.body | startswith(\"$marker\"))][0].id // empty")"
+          if [ -n "$existing" ]; then
+            gh api --method PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$existing" -f body="$body" > /dev/null
+          else
+            gh api --method POST "repos/$GITHUB_REPOSITORY/issues/$PR/comments" -f body="$body" > /dev/null
+          fi
+
+      - name: Fail unless everything passed
+        if: steps.result.outputs.status != 'passed'
+        run: exit 1
