@@ -1,12 +1,17 @@
-/** Site-wide placeholder content. Replace with real details before launch. */
+/** Site-wide profile and contact details. Only the city is public, never a street address. */
 export const site = {
-  name: "David Miller",
-  role: "Product & Web Designer",
-  email: "hello@example.com",
+  name: "Sam Coffey",
+  role: "Senior Software Engineer",
+  /** Short description of the specialities, used in the hero and metadata. */
+  focus: "AI, data and full-stack products for healthcare and benefits platforms",
+  location: "Howell, MI",
+  email: "scoffey95@hotmail.com",
+  phone: "(517) 296-6866",
+  /** Dialable form of the phone number for tel: links. */
+  phoneHref: "tel:+15172966866",
   links: {
-    linkedin: "https://www.linkedin.com/",
-    savee: "https://savee.com/",
-    x: "https://x.com/",
+    linkedin: "https://www.linkedin.com/in/sam-coffey-data",
+    github: "https://github.com/tomost8",
   },
 } as const;
 

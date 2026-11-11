@@ -52,7 +52,7 @@ export function TextRollLink({
   );
 
   if (external) {
-    const isMail = href.startsWith("mailto:");
+    const isMail = href.startsWith("mailto:") || href.startsWith("tel:");
     return (
       <a
         href={href}

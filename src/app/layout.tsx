@@ -3,16 +3,31 @@ import { GeistSans } from "geist/font/sans";
 import { CustomCursor } from "@/components/CustomCursor";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
+import { site } from "@/data/site";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
+const description = `Portfolio of ${site.name}, a ${site.role.toLowerCase()} with 9+ years of experience building ${site.focus}.`;
+
 export const metadata: Metadata = {
+  // Placeholder origin so social images resolve locally. Replace with the production domain.
+  metadataBase: new URL("http://localhost:3000"),
   title: {
-    default: "David Miller, Product & Web Designer",
-    template: "%s | David Miller",
+    default: `${site.name}, ${site.role}`,
+    template: `%s | ${site.name}`,
   },
-  description:
-    "Portfolio of a product and web designer with 5+ years of experience, designing clear and intuitive digital products for web and mobile.",
+  description,
+  openGraph: {
+    type: "profile",
+    siteName: site.name,
+    title: `${site.name}, ${site.role}`,
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${site.name}, ${site.role}`,
+    description,
+  },
 };
 
 export const viewport: Viewport = {
