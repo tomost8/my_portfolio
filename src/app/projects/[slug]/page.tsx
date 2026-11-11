@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArtworkPlaceholder } from "@/components/ArtworkPlaceholder";
 import { Tag } from "@/components/Tag";
 import { getAdjacentProjects, getProject, projects } from "@/data/projects";
 
@@ -30,7 +30,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   const { prev, next } = getAdjacentProjects(project.slug);
   const facts = [
-    { label: "Year", value: project.year },
+    { label: "Company", value: project.company },
+    { label: "Period", value: project.period },
+    ...(project.location ? [{ label: "Location", value: project.location }] : []),
     { label: "Role", value: project.role },
   ];
 
@@ -49,12 +51,33 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <p className="t-lead max-w-[640px] text-neutral-500">{project.summary}</p>
         </header>
 
-        <div className="aspect-[4/3] overflow-hidden rounded-2xl tablet:aspect-[16/9] tablet:rounded-3xl">
-          <ArtworkPlaceholder hue={project.hue} seed={0} />
-        </div>
+        <figure className="flex flex-col gap-3">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-neutral-100 tablet:aspect-[16/9] tablet:rounded-3xl">
+            <Image
+              src={project.image.src}
+              alt={project.image.alt}
+              fill
+              preload
+              sizes="(min-width: 1280px) 1200px, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <figcaption className="t-small text-neutral-500">
+            Photo by{" "}
+            <a
+              href={project.image.credit.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-neutral-950"
+            >
+              {project.image.credit.author}
+            </a>{" "}
+            on Unsplash
+          </figcaption>
+        </figure>
 
         <div className="grid gap-10 tablet:grid-cols-[1fr_2fr] tablet:gap-5">
-          <dl className="flex gap-10 tablet:flex-col tablet:gap-6">
+          <dl className="flex flex-wrap gap-x-10 gap-y-6 tablet:flex-col tablet:gap-6">
             {facts.map((fact) => (
               <div key={fact.label} className="flex flex-col gap-1">
                 <dt className="t-small text-neutral-500">{fact.label}</dt>
@@ -69,17 +92,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </h2>
               <p className="t-lead text-neutral-500">{project.overview}</p>
             </section>
+            <section aria-labelledby="highlights" className="flex flex-col gap-3">
+              <h2 id="highlights" className="t-h3">
+                What I worked on
+              </h2>
+              <ul className="flex flex-col">
+                {project.highlights.map((item) => (
+                  <li key={item} className="t-body border-t border-neutral-200 py-3 text-neutral-500">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </section>
             <section aria-labelledby="challenge" className="flex flex-col gap-3">
               <h2 id="challenge" className="t-h3">
-                Challenge
+                Engineering challenge
               </h2>
               <p className="t-lead text-neutral-500">{project.challenge}</p>
             </section>
-            <section aria-labelledby="outcome" className="flex flex-col gap-3">
-              <h2 id="outcome" className="t-h3">
-                Outcome
+            <section aria-labelledby="approach" className="flex flex-col gap-3">
+              <h2 id="approach" className="t-h3">
+                Approach
               </h2>
-              <p className="t-lead text-neutral-500">{project.outcome}</p>
+              <p className="t-lead text-neutral-500">{project.approach}</p>
             </section>
           </div>
         </div>
