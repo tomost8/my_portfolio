@@ -1,5 +1,6 @@
 import { ButtonLink } from "@/components/ButtonLink";
 import { ConceptsTicker } from "@/components/ConceptsTicker";
+import { PageMeta } from "@/components/PageMeta";
 import { ProjectCard } from "@/components/ProjectCard";
 import { Reveal } from "@/components/Reveal";
 import { Tag } from "@/components/Tag";
@@ -8,9 +9,10 @@ import { site } from "@/data/site";
 
 const featured = projects.slice(0, 4);
 
-export default function HomePage() {
+export function HomePage() {
   return (
     <main id="main">
+      <PageMeta />
       {/* The hero stays pinned while the white content slides over it. */}
       <section className="sticky top-0 z-0 flex h-svh min-h-[560px] items-end bg-neutral-100 pb-16 tablet:pb-20">
         <div className="container-l flex flex-col gap-6">

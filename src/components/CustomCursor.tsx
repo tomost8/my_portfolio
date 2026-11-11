@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 
 type CursorState = "idle" | "link" | "project" | "concept";

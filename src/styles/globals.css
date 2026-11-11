@@ -2,6 +2,18 @@
 @import "lenis/dist/lenis.css";
 
 /*
+ * Geist Sans variable font. The CSS variable name matches the old next/font setup
+ * so the type scale below can keep using var(--font-geist-sans).
+ */
+@font-face {
+  font-family: "Geist Sans";
+  src: url("../../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
  * Design tokens, taken from the FolioBase review:
  * - Tailwind "neutral" scale as exact hex values, no accent colour.
  * - Three breakpoints only: phone (< 810), tablet (810 to 1199), desktop (1200+).
@@ -33,6 +45,7 @@
 
 /* The fixed footer and the spacer that reveals it share this height. */
 :root {
+  --font-geist-sans: "Geist Sans";
   --footer-h: 328px;
 }
 

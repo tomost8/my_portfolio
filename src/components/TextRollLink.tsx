@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router";
 import { cn } from "@/lib/cn";
 
 type TextRollLinkProps = {
@@ -6,7 +6,7 @@ type TextRollLinkProps = {
   children: string;
   /** "pill" is the white nav button, "plain" is bare text (footer, buttons). */
   variant?: "pill" | "plain";
-  /** Plain anchor instead of next/link. Opens in a new tab, except for mailto: links. */
+  /** Plain anchor instead of a router link. Opens in a new tab, except for mailto: links. */
   external?: boolean;
   current?: boolean;
   onClick?: () => void;
@@ -69,7 +69,7 @@ export function TextRollLink({
 
   return (
     <Link
-      href={href}
+      to={href}
       className={classes}
       data-cursor="link"
       aria-current={current ? "page" : undefined}

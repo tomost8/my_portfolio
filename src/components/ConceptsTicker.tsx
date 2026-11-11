@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Image } from "./Image";
 import { concepts } from "@/data/concepts";
 
 /**
@@ -31,7 +31,6 @@ export function ConceptsTicker() {
                   src={concept.src}
                   alt={isCopy ? "" : concept.alt}
                   fill
-                  sizes="(min-width: 1280px) 420px, (min-width: 768px) 360px, 280px"
                   className="object-cover"
                 />
               </div>

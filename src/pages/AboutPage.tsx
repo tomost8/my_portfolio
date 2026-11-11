@@ -1,13 +1,8 @@
-import type { Metadata } from "next";
-import Image from "next/image";
 import headshot from "@/assets/images/sam-coffey-headshot.png";
 import { ButtonLink } from "@/components/ButtonLink";
+import { Image } from "@/components/Image";
+import { PageMeta } from "@/components/PageMeta";
 import { site } from "@/data/site";
-
-export const metadata: Metadata = {
-  title: "About",
-  description: "Background, experience and education of Sam Coffey, a senior software engineer.",
-};
 
 const experience = [
   {
@@ -47,9 +42,13 @@ const services = [
   "DevOps and cloud",
 ] as const;
 
-export default function AboutPage() {
+export function AboutPage() {
   return (
     <main id="main" className="bg-white pt-32 pb-20 tablet:pt-40 tablet:pb-[120px]">
+      <PageMeta
+        title="About"
+        description="Background, experience and education of Sam Coffey, a senior software engineer."
+      />
       <div className="container-l flex flex-col gap-16 tablet:gap-24">
         <header className="grid gap-10 tablet:grid-cols-2 tablet:gap-5">
           <div className="flex flex-col gap-6">
@@ -67,14 +66,13 @@ export default function AboutPage() {
               <ButtonLink href="#contact">Get in touch</ButtonLink>
             </div>
           </div>
-          <div className="aspect-[4/5] overflow-hidden rounded-2xl bg-neutral-950 tablet:rounded-3xl">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-neutral-950 tablet:rounded-3xl">
             <Image
               src={headshot}
               alt="Portrait of Sam Coffey, wearing glasses and a black T-shirt"
-              placeholder="blur"
-              preload
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="size-full object-cover object-top"
+              fill
+              priority
+              className="object-cover object-top"
             />
           </div>
         </header>

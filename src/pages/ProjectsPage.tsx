@@ -1,15 +1,14 @@
-import type { Metadata } from "next";
+import { PageMeta } from "@/components/PageMeta";
 import { ProjectCard } from "@/components/ProjectCard";
 import { projects } from "@/data/projects";
 
-export const metadata: Metadata = {
-  title: "Projects",
-  description: "Case studies from Beam Benefits, Coetic HR and a healthcare data project.",
-};
-
-export default function ProjectsPage() {
+export function ProjectsPage() {
   return (
     <main id="main" className="bg-white pt-32 pb-20 tablet:pt-40 tablet:pb-[120px]">
+      <PageMeta
+        title="Projects"
+        description="Case studies from Beam Benefits, Coetic HR and a healthcare data project."
+      />
       <div className="container-l">
         <header className="mb-12 flex flex-col gap-4 tablet:mb-16">
           <h1 className="t-h1">Projects</h1>

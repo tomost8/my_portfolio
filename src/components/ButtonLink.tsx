@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router";
 import { cn } from "@/lib/cn";
 
 type ButtonLinkProps = {
@@ -12,7 +12,7 @@ type ButtonLinkProps = {
 export function ButtonLink({ href, children, tone = "dark", className }: ButtonLinkProps) {
   return (
     <Link
-      href={href}
+      to={href}
       data-cursor="link"
       className={cn(
         "group inline-flex h-12 items-center rounded-full px-6 text-[16px] font-semibold tracking-[-0.02em] transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-950",
