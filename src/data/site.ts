@@ -5,7 +5,7 @@ export const site = {
   /** Short description of the specialities, used in the hero and metadata. */
   focus: "AI, data and full-stack products for healthcare and benefits platforms",
   location: "Howell, MI",
-  email: "scoffey95@hotmail.com",
+  email: "sam.coffey.1009@gmail.com",
   phone: "(517) 296-6866",
   /** Dialable form of the phone number for tel: links. */
   phoneHref: "tel:+15172966866",
