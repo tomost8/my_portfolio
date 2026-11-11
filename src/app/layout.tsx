@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
+import { CustomCursor } from "@/components/CustomCursor";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { SmoothScroll } from "@/components/SmoothScroll";
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <div id="contact" aria-hidden="true" className="pointer-events-none h-(--footer-h)" />
         </div>
         <Footer />
+        <CustomCursor />
       </body>
     </html>
   );
