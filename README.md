@@ -1,6 +1,6 @@
 # my_portfolio
 
-Portfolio for a product and web designer, rebuilt in Next.js after the structure, design system and motion of the FolioBase Framer template. All copy and images here are placeholders.
+Portfolio of Sam Coffey, a senior software engineer working on AI, data and full-stack products for healthcare and employee benefits. Built in Next.js, based on the structure, design system and motion of the FolioBase Framer template.
 
 ## Stack
 

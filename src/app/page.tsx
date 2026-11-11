@@ -15,13 +15,13 @@ export default function HomePage() {
       <section className="sticky top-0 z-0 flex h-svh min-h-[560px] items-end bg-neutral-100 pb-16 tablet:pb-20">
         <div className="container-l flex flex-col gap-6">
           <Reveal>
-            <Tag tone="white">Available for freelance</Tag>
+            <Tag tone="white">{site.location}</Tag>
           </Reveal>
           <Reveal delay={0.1}>
             <h1 className="t-h1 max-w-[880px] text-neutral-500">
               <span className="text-neutral-950">{site.name}</span> is a {site.role.toLowerCase()}{" "}
-              with 5+ years of experience, designing clear and intuitive digital products for web
-              and mobile.
+              with 9+ years of experience building AI, data and full-stack products for healthcare
+              and employee benefits.
             </h1>
           </Reveal>
         </div>
