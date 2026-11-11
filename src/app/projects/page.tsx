@@ -4,7 +4,7 @@ import { projects } from "@/data/projects";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Selected product and web design case studies.",
+  description: "Case studies from Beam Benefits, Coetic HR and a healthcare data project.",
 };
 
 export default function ProjectsPage() {
@@ -14,12 +14,12 @@ export default function ProjectsPage() {
         <header className="mb-12 flex flex-col gap-4 tablet:mb-16">
           <h1 className="t-h1">Projects</h1>
           <p className="t-lead max-w-[520px] text-neutral-500">
-            A selection of recent product and web design work.
+            Platforms I have helped build in healthcare, benefits and organizational software.
           </p>
         </header>
         <div className="grid gap-x-5 gap-y-12 tablet:grid-cols-2 tablet:gap-y-16">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.slug} project={project} index={index} headingLevel="h2" />
+          {projects.map((project) => (
+            <ProjectCard key={project.slug} project={project} headingLevel="h2" />
           ))}
         </div>
       </div>
