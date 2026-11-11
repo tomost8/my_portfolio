@@ -1,7 +1,5 @@
-"use client";
-
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router";
 import { navItems } from "@/data/site";
 import { cn } from "@/lib/cn";
 import { TextRollLink } from "./TextRollLink";
@@ -18,7 +16,7 @@ function isCurrent(pathname: string, match?: string): boolean {
  * - Phone: a 48px round hamburger button. Opening it reveals the links in a column.
  */
 export function Nav() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 

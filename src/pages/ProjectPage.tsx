@@ -1,32 +1,14 @@
-import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import { Link, useParams } from "react-router";
+import { Image } from "@/components/Image";
+import { PageMeta } from "@/components/PageMeta";
 import { Tag } from "@/components/Tag";
-import { getAdjacentProjects, getProject, projects } from "@/data/projects";
+import { getAdjacentProjects, getProject } from "@/data/projects";
+import { NotFoundPage } from "@/pages/NotFoundPage";
 
-type ProjectPageProps = {
-  params: Promise<{ slug: string }>;
-};
-
-/** Only the slugs in the data file exist. Anything else is a 404. */
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
-}
-
-export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const project = getProject(slug);
-  if (!project) return {};
-  return { title: project.title, description: project.summary };
-}
-
-export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { slug } = await params;
-  const project = getProject(slug);
-  if (!project) notFound();
+export function ProjectPage() {
+  const { slug } = useParams();
+  const project = slug ? getProject(slug) : undefined;
+  if (!project) return <NotFoundPage />;
 
   const { prev, next } = getAdjacentProjects(project.slug);
   const facts = [
@@ -38,6 +20,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
   return (
     <main id="main" className="bg-white pt-32 pb-20 tablet:pt-40 tablet:pb-[120px]">
+      <PageMeta title={project.title} description={project.summary} />
       <div className="container-l flex flex-col gap-12 tablet:gap-16">
         <header className="flex flex-col gap-6">
           <ul className="flex flex-wrap gap-2" aria-label="Categories">
@@ -57,8 +40,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               src={project.image.src}
               alt={project.image.alt}
               fill
-              preload
-              sizes="(min-width: 1280px) 1200px, 100vw"
+              priority
               className="object-cover"
             />
           </div>
@@ -124,7 +106,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           className="grid gap-5 border-t border-neutral-200 pt-8 tablet:grid-cols-2"
         >
           <Link
-            href={`/projects/${prev.slug}`}
+            to={`/projects/${prev.slug}`}
             data-cursor="link"
             className="flex flex-col gap-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950"
           >
@@ -132,7 +114,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             <span className="t-card-title">{prev.title}</span>
           </Link>
           <Link
-            href={`/projects/${next.slug}`}
+            to={`/projects/${next.slug}`}
             data-cursor="link"
             className="flex flex-col gap-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-neutral-950 tablet:items-end tablet:text-right"
           >
