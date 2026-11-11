@@ -1,0 +1,99 @@
+name: Open pull request
+
+# A push to a feature-prefix branch opens a pull request into dev.
+# A push to dev opens (or updates) the pull request from dev into main.
+#
+# This uses the GH_TOKEN repository secret, not the default GITHUB_TOKEN: pull
+# requests opened with the default token do not start the next workflow.
+on:
+  push:
+    branches:
+      - "feat/**"
+      - "fix/**"
+      - "docs/**"
+      - "ci/**"
+      - "build/**"
+      - dev
+
+permissions:
+  contents: read
+
+concurrency:
+  group: open-pull-request-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  open:
+    name: Open or update pull request
+    if: github.event.deleted == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Open or update the pull request
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::The GH_TOKEN repository secret is missing. Add a token that can write pull requests and workflows."
+            exit 1
+          fi
+
+          if [ "$BRANCH" = "dev" ]; then
+            base="main"
+          else
+            base="dev"
+          fi
+
+          existing="$(gh pr list --head "$BRANCH" --base "$base" --state open --json number --jq '.[0].number // empty')"
+
+          if [ "$base" = "dev" ]; then
+            # Feature branch into dev. Leave an open pull request alone.
+            if [ -n "$existing" ]; then
+              echo "Pull request #$existing is already open for $BRANCH."
+              exit 0
+            fi
+            if [ "$(git rev-list --count "origin/dev..origin/$BRANCH")" = "0" ]; then
+              echo "$BRANCH has nothing that dev does not already have."
+              exit 0
+            fi
+            title="$(git log -1 --format=%s "origin/$BRANCH")"
+            gh pr create --base dev --head "$BRANCH" --title "$title" \
+              --body "Opened automatically for \`$BRANCH\`. It merges into \`dev\` after **CI passed**, and the issue closes with the \`dev\` to \`main\` pull request."
+            exit 0
+          fi
+
+          # dev into main. Only when dev is ahead of main.
+          ahead="$(git rev-list --count origin/main..origin/dev)"
+          if [ "$ahead" = "0" ] && [ -z "$existing" ]; then
+            echo "dev is not ahead of main."
+            exit 0
+          fi
+
+          # Collect issue numbers from branch names (feat/12-...) in the merge
+          # commit subjects, and from Closes / Fixes / Resolves lines.
+          issues="$( {
+            git log origin/main..origin/dev --format=%s | grep -oE '(feat|fix|docs|ci|build)/[0-9]+-' | grep -oE '[0-9]+'
+            git log origin/main..origin/dev --format=%B | grep -ioE '(close[sd]?|fix(e[sd])?|resolve[sd]?)[: ]+#[0-9]+' | grep -oE '[0-9]+'
+          } | sort -un || true)"
+
+          body="Promotes everything on \`dev\` to \`main\`. It merges after **CI passed**, then Vercel deploys \`main\` to production."
+          if [ -n "$issues" ]; then
+            body="$body"$'\n\n'
+            for n in $issues; do
+              body="$body"$'Closes #'"$n"$'\n'
+            done
+          fi
+
+          if [ -n "$existing" ]; then
+            gh pr edit "$existing" --body "$body"
+            echo "Updated pull request #$existing."
+          else
+            gh pr create --base main --head dev --title "Release: promote dev to main" --body "$body"
+          fi
