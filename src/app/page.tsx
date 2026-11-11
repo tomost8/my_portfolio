@@ -1,6 +1,7 @@
 import { ButtonLink } from "@/components/ButtonLink";
 import { ConceptsTicker } from "@/components/ConceptsTicker";
 import { ProjectCard } from "@/components/ProjectCard";
+import { Reveal } from "@/components/Reveal";
 import { Tag } from "@/components/Tag";
 import { projects } from "@/data/projects";
 import { site } from "@/data/site";
@@ -13,12 +14,16 @@ export default function HomePage() {
       {/* The hero stays pinned while the white content slides over it. */}
       <section className="sticky top-0 z-0 flex h-svh min-h-[560px] items-end bg-neutral-100 pb-16 tablet:pb-20">
         <div className="container-l flex flex-col gap-6">
-          <Tag tone="white">Available for freelance</Tag>
-          <h1 className="t-h1 max-w-[880px] text-neutral-500">
-            <span className="text-neutral-950">{site.name}</span> is a {site.role.toLowerCase()}{" "}
-            with 5+ years of experience, designing clear and intuitive digital products for web
-            and mobile.
-          </h1>
+          <Reveal>
+            <Tag tone="white">Available for freelance</Tag>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="t-h1 max-w-[880px] text-neutral-500">
+              <span className="text-neutral-950">{site.name}</span> is a {site.role.toLowerCase()}{" "}
+              with 5+ years of experience, designing clear and intuitive digital products for web
+              and mobile.
+            </h1>
+          </Reveal>
         </div>
       </section>
 
@@ -34,7 +39,9 @@ export default function HomePage() {
           </div>
           <div className="grid gap-x-5 gap-y-12 tablet:grid-cols-2 tablet:gap-y-16">
             {featured.map((project, index) => (
-              <ProjectCard key={project.slug} project={project} index={index} />
+              <Reveal key={project.slug} delay={(index % 2) * 0.1}>
+                <ProjectCard project={project} index={index} />
+              </Reveal>
             ))}
           </div>
         </section>
