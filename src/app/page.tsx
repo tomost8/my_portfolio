@@ -49,10 +49,11 @@ export default function HomePage() {
         <section aria-labelledby="concepts-heading" className="pb-20 tablet:pb-[120px]">
           <div className="container-l mb-10 flex flex-col gap-3 tablet:mb-14">
             <h2 id="concepts-heading" className="t-h2">
-              Concepts
+              Focus areas
             </h2>
             <p className="t-lead max-w-[520px] text-neutral-500">
-              Quick explorations made between projects, to try ideas without a brief.
+              The engineering problems I keep coming back to across healthcare, benefits and data
+              platforms.
             </p>
           </div>
           <ConceptsTicker />
