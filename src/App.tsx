@@ -15,9 +15,12 @@ export function App() {
       </a>
       <SmoothScroll />
       <Nav />
-      {/* The page sits above the fixed footer. The spacer at the end lets it scroll away. */}
-      <div className="relative z-[2]">
-        <Outlet />
+      {/* The page sits above the fixed footer. The spacer at the end lets it scroll
+          away. The wrapper ignores clicks so those fall through to the footer links. */}
+      <div className="pointer-events-none relative z-[2]">
+        <div className="pointer-events-auto">
+          <Outlet />
+        </div>
         <div id="contact" aria-hidden="true" className="pointer-events-none h-(--footer-h)" />
       </div>
       <Footer />
